@@ -8,6 +8,7 @@ Dana's corner of the Lovell crew site: projects, experiments, and the things I'm
 |------|--------------|
 | `index.html` | The homepage |
 | `projects/index.html` | The Projects page |
+| `skills/index.html` | The AI Skills page (the skills themselves live in [ai-skills](https://github.com/dmerolesi/ai-skills)) |
 | `style.css` | Colors, fonts, and spacing (light and dark mode) |
 
 ## How it's built and hosted
