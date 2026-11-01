@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Step by Step Recipes</title>
+  <meta name="description" content="Recipes shown and read aloud one step at a time, waiting for you before moving on.">
+  <meta name="theme-color" content="#000000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Recipes">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🍲%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Lexend:wght@400;600&display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/opendyslexic@5.2.5/400.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/opendyslexic@5.2.5/700.css">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div id="app"><p style="padding:2rem;font-size:2rem">Loading…</p></div>
+  <div id="alert" hidden></div>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <noscript><p style="padding:2rem;font-size:2rem">This app needs JavaScript turned on.</p></noscript>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
