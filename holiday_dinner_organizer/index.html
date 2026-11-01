@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Holiday Dinner Organizer</title>
+  <meta name="description" content="Plan the prep and cooking for a big meal: a step-by-step guide, an appliance timeline, a grocery list and a tool list.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍽️</text></svg>">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <div id="screen">
+    <header class="app-header">
+      <div class="wrap header-row">
+        <div class="title-block">
+          <p class="eyebrow">Holiday Dinner Organizer</p>
+          <input id="plan-title" class="plan-title" aria-label="Meal name" maxlength="80">
+        </div>
+        <button data-action="share" class="ghost">🔗 Copy share link</button>
+      </div>
+      <nav class="wrap tabs" role="tablist">
+        <button role="tab" data-tab="kitchen">1. Kitchen</button>
+        <button role="tab" data-tab="recipes">2. Recipes <span id="recipe-count" class="count"></span></button>
+        <button role="tab" data-tab="plan">3. Plan</button>
+      </nav>
+    </header>
+
+    <main class="wrap">
+      <section id="tab-kitchen" class="tab-panel" role="tabpanel"></section>
+      <section id="tab-recipes" class="tab-panel" role="tabpanel" hidden></section>
+      <section id="tab-plan" class="tab-panel" role="tabpanel" hidden></section>
+      <noscript><p class="card">This planner needs JavaScript turned on.</p></noscript>
+    </main>
+
+    <footer class="wrap footer">
+      <p>Your plan is saved in this browser only. Nothing is sent anywhere unless you use your own API key.</p>
+    </footer>
+  </div>
+
+  <div id="print-root" aria-hidden="true"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
