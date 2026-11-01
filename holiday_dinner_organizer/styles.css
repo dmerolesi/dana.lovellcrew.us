@@ -1,0 +1,239 @@
+/* Colors match the main site (style.css one folder up) so the app feels like part of it. */
+:root {
+  --bg: #faf7f2;
+  --surface: #ffffff;
+  --surface-2: #f3efe8;
+  --text: #2b2a28;
+  --muted: #6b675f;
+  --accent: #5b5bd6;
+  --accent-text: #ffffff;
+  --border: #e6e0d6;
+  --warn-bg: #fff4dc;
+  --warn-border: #e9c46a;
+  --error: #b42318;
+  --error-bg: #fdecea;
+  --batch: #8a8478;
+  /* One color per recipe on the timeline and step cards. */
+  --c0: #d1495b; --c1: #2a9d8f; --c2: #e07a1f; --c3: #5b5bd6;
+  --c4: #3a86c8; --c5: #9c4dcc; --c6: #6a994e; --c7: #b5838d;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1b1d1c; --surface: #252826; --surface-2: #2e322f; --text: #ecebe7; --muted: #a8a49c;
+    --accent: #a9b0ff; --accent-text: #1b1d1c; --border: #3a3d3b;
+    --warn-bg: #3a3220; --warn-border: #8a6d2b; --error: #ff8a80; --error-bg: #3b2321; --batch: #9b958a;
+    --c0: #ef6f7f; --c1: #4cc3b4; --c2: #f0a050; --c3: #a9b0ff;
+    --c4: #6fb1e8; --c5: #c58ae6; --c6: #93c47d; --c7: #d4a5ae;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1b1d1c; --surface: #252826; --surface-2: #2e322f; --text: #ecebe7; --muted: #a8a49c;
+  --accent: #a9b0ff; --accent-text: #1b1d1c; --border: #3a3d3b;
+  --warn-bg: #3a3220; --warn-border: #8a6d2b; --error: #ff8a80; --error-bg: #3b2321; --batch: #9b958a;
+  --c0: #ef6f7f; --c1: #4cc3b4; --c2: #f0a050; --c3: #a9b0ff;
+  --c4: #6fb1e8; --c5: #c58ae6; --c6: #93c47d; --c7: #d4a5ae;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+.wrap { max-width: 960px; margin: 0 auto; padding: 0 16px; }
+a { color: var(--accent); }
+h2 { font-size: 1.25rem; margin: 0 0 8px; }
+h3 { font-size: 1.05rem; margin: 0; }
+.hint { color: var(--muted); font-size: 0.9rem; }
+.hint.warn, .warn { color: var(--text); }
+.empty { color: var(--muted); text-align: center; padding: 24px 0; }
+
+/* ---------- header and tabs ---------- */
+.app-header { background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 10; }
+.header-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 14px; }
+.title-block { min-width: 0; flex: 1; }
+.eyebrow { margin: 0; color: var(--accent); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.75rem; }
+.plan-title { font: inherit; font-size: 1.5rem; font-weight: 700; border: 1px solid transparent; background: transparent; color: var(--text); padding: 2px 6px; margin-left: -7px; border-radius: 8px; width: 100%; max-width: 520px; }
+.plan-title:hover, .plan-title:focus { border-color: var(--border); outline: none; }
+.tabs { display: flex; gap: 4px; margin-top: 8px; overflow-x: auto; }
+.tabs button { border: none; border-bottom: 3px solid transparent; border-radius: 0; background: none; padding: 10px 14px; font-weight: 600; color: var(--muted); }
+.tabs button.active { color: var(--text); border-bottom-color: var(--accent); }
+.count { font-size: 0.8rem; color: var(--muted); font-weight: 500; }
+
+main { padding-top: 20px; padding-bottom: 40px; }
+.footer { color: var(--muted); font-size: 0.85rem; padding-bottom: 32px; }
+
+/* ---------- controls ---------- */
+button, .button {
+  font: inherit; font-size: 0.95rem; font-weight: 600;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 9px 14px; border-radius: 10px; cursor: pointer;
+  border: 1px solid var(--border); background: var(--surface); color: var(--text);
+}
+button:hover, .button:hover { border-color: var(--accent); }
+button:focus-visible, .button:focus-within, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid color-mix(in srgb, var(--accent) 45%, transparent); outline-offset: 1px; }
+button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-text); }
+button.ghost { background: transparent; }
+button.danger { color: var(--error); border-color: transparent; }
+button:disabled { opacity: 0.6; cursor: progress; }
+
+input[type="text"], input[type="url"], input[type="password"], input[type="number"], input[type="datetime-local"], select, textarea {
+  font: inherit; font-size: 1rem; color: var(--text); background: var(--bg);
+  border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; width: 100%;
+}
+input[type="number"] { width: 5.5em; }
+textarea { resize: vertical; }
+textarea.mono { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.8rem; }
+input[type="checkbox"], input[type="radio"] { width: 18px; height: 18px; accent-color: var(--accent); flex: none; margin-top: 3px; }
+
+.field { display: flex; flex-direction: column; gap: 4px; font-weight: 600; font-size: 0.95rem; margin: 10px 0; }
+.field .hint { font-weight: 400; }
+.field.small { max-width: 340px; }
+.inline { display: inline-flex; align-items: center; gap: 6px; font-weight: 400; }
+.check, .choice { display: flex; gap: 10px; align-items: flex-start; margin: 12px 0; cursor: pointer; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.row.space { justify-content: space-between; }
+.next-row { display: flex; justify-content: flex-end; margin-top: 8px; }
+
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 18px; margin-bottom: 16px; }
+
+/* ---------- kitchen ---------- */
+.appliance-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-top: 12px; }
+.appliance { border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; background: var(--bg); }
+.appliance.on { border-color: var(--accent); }
+.appliance-name { display: flex; gap: 8px; font-weight: 600; cursor: pointer; }
+.appliance-nums { display: flex; gap: 10px; margin-top: 8px; font-size: 0.85rem; color: var(--muted); }
+.appliance-nums label { display: flex; flex-direction: column; gap: 2px; }
+.appliance-nums input { width: 4.5em; padding: 4px 6px; }
+.settings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0 20px; }
+.settings-grid .field input[type="number"] { width: 5em; }
+
+/* ---------- recipes ---------- */
+.choice-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; }
+.choice { border: 1px solid var(--border); border-radius: 10px; padding: 12px; margin: 0; background: var(--bg); }
+.choice:has(input:checked) { border-color: var(--accent); }
+.api-box { margin-top: 12px; padding-top: 4px; border-top: 1px solid var(--border); }
+.recipe-head { display: flex; align-items: center; gap: 10px; }
+.recipe-head h3 { flex: 1; }
+.dot { width: 12px; height: 12px; border-radius: 50%; background: var(--rc); flex: none; display: inline-block; }
+.dot.hatch { background: repeating-linear-gradient(45deg, var(--muted) 0 3px, transparent 3px 6px); border: 1px solid var(--muted); }
+.recipe.parsed { border-left: 5px solid var(--rc); }
+.file-pill { background: var(--surface-2); border-radius: 8px; padding: 8px 12px; display: inline-block; }
+.ai-steps { padding-left: 20px; margin: 12px 0 0; }
+.ai-steps > li { margin-bottom: 10px; }
+.ai-steps > li > .hint { display: block; margin-top: 4px; }
+.notes { margin: 6px 0; padding-left: 20px; color: var(--muted); font-size: 0.9rem; }
+details { margin-top: 8px; }
+summary { cursor: pointer; font-weight: 600; color: var(--accent); }
+.mini-steps { padding-left: 20px; font-size: 0.92rem; }
+.error-box { background: var(--error-bg); color: var(--error); border-radius: 8px; padding: 10px 12px; margin: 10px 0 0; }
+.add-card { border-style: dashed; }
+
+/* ---------- plan ---------- */
+.toolbar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 16px; }
+.toolbar .check { margin: 0; }
+.notice { background: var(--surface-2); border-radius: 10px; padding: 10px 14px; margin: 0 0 16px; }
+.notice.warn { background: var(--warn-bg); border: 1px solid var(--warn-border); }
+.notice ul { margin: 4px 0 0; padding-left: 20px; }
+.subtabs { display: flex; gap: 6px; margin-bottom: 14px; overflow-x: auto; scrollbar-width: none; }
+.subtabs button { border-radius: 999px; padding: 7px 16px; }
+.subtabs button.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+
+.day-head { margin: 24px 0 10px; font-size: 1.1rem; color: var(--accent); }
+.section { border-left: 5px solid var(--rc); }
+.section header { display: flex; gap: 12px; align-items: center; margin-bottom: 6px; }
+.section header .hint { margin: 2px 0 0; }
+.sec-num { width: 30px; height: 30px; border-radius: 50%; background: var(--rc); color: #fff; font-weight: 700; display: grid; place-items: center; flex: none; font-size: 0.9rem; }
+.tools-line { font-size: 0.9rem; margin: 4px 0 8px; color: var(--muted); }
+.tools-line b { color: var(--text); }
+.steps { list-style: none; padding: 0; margin: 0; }
+.step { border-top: 1px solid var(--border); }
+.step > label { display: grid; grid-template-columns: 22px 78px 1fr; gap: 8px; padding: 10px 0; cursor: pointer; align-items: start; }
+.step .time { font-weight: 700; font-variant-numeric: tabular-nums; }
+.step .meta { display: inline-block; font-size: 0.82rem; color: var(--muted); background: var(--surface-2); border-radius: 6px; padding: 0 6px; margin-left: 4px; }
+.step ul { margin: 6px 0 0; padding-left: 18px; font-size: 0.95rem; }
+.step.timer .what { color: var(--muted); }
+.step.suggested ul li:first-child { color: var(--accent); }
+.step.done .what, .step.done .time { text-decoration: line-through; color: var(--muted); }
+.raw-note { font-size: 0.9rem; background: var(--surface-2); border-radius: 8px; padding: 8px 12px; margin: 8px 0 0; }
+
+/* timeline */
+.day-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+.day-chips button { border-radius: 999px; padding: 6px 12px; font-size: 0.85rem; }
+.day-chips button.active { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
+.timeline { overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; margin-top: 8px; background: var(--bg); }
+.tl-inner { display: inline-block; min-width: 100%; }
+.tl-row { display: flex; border-bottom: 1px solid var(--border); }
+.tl-row:last-child { border-bottom: none; }
+.tl-label { position: sticky; left: 0; z-index: 2; width: 130px; flex: none; padding: 8px 10px; font-size: 0.85rem; font-weight: 600; background: var(--surface); border-right: 1px solid var(--border); }
+.tl-row.missing .tl-label { color: var(--error); }
+.tl-track { position: relative; flex: none; background-image: repeating-linear-gradient(90deg, var(--border) 0 1px, transparent 1px 144px); }
+.tl-axis { height: 30px; }
+.tl-axis .tl-track { background: none; }
+.tick { position: absolute; top: 6px; font-size: 0.75rem; color: var(--muted); white-space: nowrap; transform: translateX(3px); }
+.bar { position: absolute; height: 26px; border-radius: 6px; background: var(--rc); color: #fff; font-size: 0.75rem; font-weight: 600; padding: 4px 6px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; cursor: default; }
+.bar span { overflow: hidden; text-overflow: ellipsis; display: block; }
+.bar.hands { background: color-mix(in srgb, var(--rc) 85%, #000); }
+.bar.preheat { background: repeating-linear-gradient(45deg, color-mix(in srgb, var(--rc) 45%, transparent) 0 4px, transparent 4px 8px); border: 1px dashed var(--rc); color: var(--text); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 12px; font-size: 0.85rem; }
+.legend-item { display: inline-flex; align-items: center; gap: 6px; }
+
+/* grocery and tools */
+.checklist { list-style: none; padding: 0; margin: 4px 0 14px; }
+.checklist li label { display: flex; gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--border); cursor: pointer; align-items: flex-start; }
+.checklist .hint { display: block; }
+.checklist.have span { color: var(--muted); text-decoration: line-through; }
+.card h3 { margin-top: 12px; }
+
+/* ---------- small things ---------- */
+.spinner { width: 14px; height: 14px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; display: inline-block; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.toast { position: fixed; left: 50%; bottom: 20px; transform: translate(-50%, 20px); background: var(--text); color: var(--bg); padding: 10px 16px; border-radius: 10px; max-width: calc(100% - 32px); opacity: 0; pointer-events: none; transition: opacity 0.2s, transform 0.2s; z-index: 50; }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+.toast.error { background: var(--error); color: #fff; }
+
+@media (max-width: 600px) {
+  body { font-size: 16px; }
+  .header-row { flex-wrap: wrap; }
+  .header-row > button { font-size: 0.85rem; padding: 6px 10px; }
+  .plan-title { font-size: 1.25rem; }
+  .step > label { grid-template-columns: 22px 1fr; }
+  .step .time { grid-column: 2; }
+  .step .what { grid-column: 2; }
+  .tl-label { width: 96px; font-size: 0.78rem; }
+  .card { padding: 14px; }
+}
+
+/* ---------- print ---------- */
+#print-root { display: none; }
+@media print {
+  @page { margin: 16mm; }
+  body { background: #fff; color: #000; font-size: 11pt; }
+  #screen, .toast { display: none !important; }
+  #print-root { display: block; }
+  #print-root h1 { font-size: 20pt; margin: 0 0 4pt; }
+  #print-root h2 { font-size: 14pt; margin: 14pt 0 4pt; border-bottom: 1px solid #999; padding-bottom: 2pt; break-after: avoid; }
+  #print-root h3 { font-size: 11pt; margin: 8pt 0 2pt; break-after: avoid; }
+  #print-root .p-intro { margin: 0 0 2pt; color: #333; }
+  #print-root .p-sub { margin: 0 0 4pt; font-style: italic; color: #444; }
+  #print-root .p-day { margin: 12pt 0 0; font-weight: 700; color: #5b5bd6; }
+  #print-root .p-day + h2 { margin-top: 2pt; }
+  #print-root ul, #print-root ol { margin: 2pt 0 6pt; padding-left: 0; }
+  #print-root ul ul { padding-left: 18pt; list-style: disc; }
+  #print-root .p-check, #print-root .p-steps { list-style: none; }
+  #print-root .p-check li, #print-root .p-steps > li { margin: 3pt 0; break-inside: avoid; }
+  #print-root > section > ul:not(.p-check) { padding-left: 16pt; }
+  #print-root .box { display: inline-block; width: 9pt; height: 9pt; border: 1px solid #555; margin-right: 6pt; vertical-align: -1pt; }
+  #print-root small { color: #555; }
+  #print-root .p-break { break-before: page; }
+}
