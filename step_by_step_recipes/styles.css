@@ -1,35 +1,39 @@
 /* Every text color below meets WCAG AAA contrast (7:1 or more) against its background. */
+/* Solar Star night and day, tuned so every text color meets WCAG AAA (7:1 or more).
+   Brand colors come from /solar-star.css; the numbers are in Solar-Star-Theme/contrast-report.md. */
 :root,
 [data-theme="dark"] {
-  --bg: #000000;
-  --surface: #1a1a1a;
-  --text: #ffffff;
-  --muted: #d6d6d6;
-  --accent: #ffe14d;
-  --on-accent: #000000;
-  --border: #8a8a8a;
-  --reading-bg: #ffe14d;
-  --reading-text: #000000;
-  --time: #9fe7ff;
-  --danger: #ff9a9a;
-  --flash-a: #ffe14d;
-  --flash-b: #000000;
+  --bg: var(--ss-navy, #0F1A3A);
+  --surface: #18244A;
+  --text: var(--ss-starlight, #F7F4EC);
+  --muted: #D3D6E6;
+  --accent: var(--ss-gold, #D9A441);
+  --on-accent: var(--ss-navy, #0F1A3A);
+  --border: #8A96C4;
+  --reading-bg: var(--ss-gold, #D9A441);
+  --reading-text: var(--ss-navy, #0F1A3A);
+  --time: var(--ss-lavender, #C9B8F0);
+  --danger: #FFA39C;
+  --flash-a: var(--ss-gold, #D9A441);
+  --flash-b: var(--ss-navy, #0F1A3A);
+  --heading: var(--ss-lavender-light, #E4DAFA);
 }
 
 [data-theme="light"] {
-  --bg: #fff8e7;
+  --bg: var(--ss-starlight, #F7F4EC);
   --surface: #ffffff;
-  --text: #1a1a1a;
-  --muted: #3d3d3d;
-  --accent: #0b3d91;
-  --on-accent: #ffffff;
-  --border: #6b6b6b;
-  --reading-bg: #0b3d91;
-  --reading-text: #ffffff;
-  --time: #0b3d91;
+  --text: var(--ss-navy, #0F1A3A);
+  --muted: #3A3F55;
+  --accent: var(--ss-violet, #3B1E6E);
+  --on-accent: var(--ss-starlight, #F7F4EC);
+  --border: #6E6787;
+  --reading-bg: var(--ss-violet, #3B1E6E);
+  --reading-text: var(--ss-starlight, #F7F4EC);
+  --time: #5E2878;
   --danger: #8f1111;
-  --flash-a: #0b3d91;
-  --flash-b: #fff8e7;
+  --flash-a: var(--ss-violet, #3B1E6E);
+  --flash-b: var(--ss-starlight, #F7F4EC);
+  --heading: var(--ss-violet, #3B1E6E);
 }
 
 [data-theme="warm"] {
@@ -46,6 +50,7 @@
   --danger: #ffb4a0;
   --flash-a: #f5c27a;
   --flash-b: #2b2118;
+  --heading: #f7ead2;
 }
 
 :root {
@@ -83,7 +88,9 @@ body { min-height: 100vh; min-height: 100dvh; }
   padding-bottom: env(safe-area-inset-bottom);
 }
 
-h1, h2 { line-height: 1.25; margin: 0; }
+h1, h2 { line-height: 1.25; margin: 0; font-family: var(--font); font-weight: 700; color: var(--heading); }
+/* Brand title on the home screen only: Fraunces, unless the cook picked a reading font. */
+.home-top h1.brand { font-family: var(--ss-font-heading, Georgia, serif); font-weight: 500; }
 h1 { font-size: 1.5em; }
 h2 { font-size: 1.25em; margin: 1.2em 0 0.5em; }
 p { margin: 0.6em 0; }

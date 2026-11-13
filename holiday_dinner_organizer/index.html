@@ -6,18 +6,24 @@
   <title>Holiday Dinner Organizer</title>
   <meta name="description" content="Plan the prep and cooking for a big meal: a step-by-step guide, an appliance timeline, a grocery list and a tool list.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍽️</text></svg>">
+  <script src="/theme.js"></script>
+  <link rel="stylesheet" href="/solar-star.css">
   <link rel="stylesheet" href="./styles.css">
   <script type="module" src="./app.js"></script>
 </head>
 <body>
   <div id="screen">
+    <div class="ss-banner" role="presentation"></div>
     <header class="app-header">
       <div class="wrap header-row">
         <div class="title-block">
           <p class="eyebrow">Holiday Dinner Organizer</p>
           <input id="plan-title" class="plan-title" aria-label="Meal name" maxlength="80">
         </div>
-        <button data-action="share" class="ghost">🔗 Copy share link</button>
+        <div class="header-actions">
+          <button data-action="share" class="ghost">🔗 Copy share link</button>
+          <button type="button" class="ss-theme-toggle"></button>
+        </div>
       </div>
       <nav class="wrap tabs" role="tablist">
         <button role="tab" data-tab="kitchen">1. Kitchen</button>

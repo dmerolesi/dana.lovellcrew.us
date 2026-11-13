@@ -33,8 +33,8 @@ const FONTS = {
 };
 
 const THEMES = {
-  dark: 'Bright on black (high contrast)',
-  light: 'Dark on cream (high contrast)',
+  dark: 'Solar Star night (high contrast)',
+  light: 'Solar Star day (high contrast)',
   warm: 'Warm and soft (low glare)',
 };
 
@@ -169,8 +169,9 @@ function renderHome() {
       </div>`;
 
   return `
+    <div class="ss-banner recipes-banner" role="presentation"></div>
     <header class="topbar home-top">
-      <h1>${s.cookName ? `Hi, ${esc(s.cookName)}` : 'Step by Step Recipes'}</h1>
+      <h1${s.font === 'atkinson' ? ' class="brand"' : ''}>${s.cookName ? `Hi, ${esc(s.cookName)}` : 'Step by Step Recipes'}</h1>
       <button class="btn" data-action="go-settings">Settings</button>
     </header>
     ${timersStrip()}
