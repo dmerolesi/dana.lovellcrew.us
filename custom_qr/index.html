@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Custom QR</title>
+  <meta name="description" content="Make a styled QR code for any website, check that it scans, and download it.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9C%A6%3C/text%3E%3C/svg%3E">
+  <script src="/theme.js"></script>
+  <link rel="stylesheet" href="/solar-star.css">
+  <link rel="stylesheet" href="./styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <div class="ss-banner" role="presentation"></div>
+  <header class="wrap top">
+    <div>
+      <p class="eyebrow">Solar Star Solutions</p>
+      <h1>Custom QR</h1>
+      <p class="lead">Type your website and get a QR code in its colors, with its logo and a style that fits. Download it ready to print.</p>
+    </div>
+    <button type="button" class="ss-theme-toggle"></button>
+  </header>
+
+  <main class="wrap">
+    <form id="qr-form" class="card" novalidate>
+      <label for="url" class="field-label">1. Website</label>
+      <p id="url-hint" class="hint">For example: yourwebsite.com</p>
+      <div class="url-row">
+        <input id="url" name="url" type="url" inputmode="url" autocomplete="url" spellcheck="false"
+               aria-describedby="url-hint url-error" placeholder="example.com">
+        <button type="submit" class="primary">Make my QR</button>
+      </div>
+      <p id="url-error" class="error" role="alert" hidden></p>
+    </form>
+
+    <section class="card" aria-labelledby="design-heading">
+      <h2 id="design-heading" class="field-label">2. Pick a design</h2>
+      <div class="design-groups" role="radiogroup" aria-labelledby="design-heading">
+        <div id="site-group" hidden>
+          <h3 class="group-label">Made from your website</h3>
+          <p id="site-note" class="hint" aria-live="polite"></p>
+          <div id="site-designs" class="designs"></div>
+        </div>
+        <h3 class="group-label">Standard designs</h3>
+        <div id="designs" class="designs"></div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="custom-heading">
+      <h2 id="custom-heading" class="field-label">3. Make it yours (optional)</h2>
+      <p class="hint">Starts from the design you picked. Change anything below.</p>
+      <div class="custom-grid">
+        <fieldset class="opt">
+          <legend>Middle</legend>
+          <label class="radio"><input type="radio" name="mid" value="none"> Nothing</label>
+          <label class="radio" id="mid-site-label"><input type="radio" name="mid" value="site" id="mid-site"> The website's logo</label>
+          <label class="radio"><input type="radio" name="mid" value="own"> My own image</label>
+          <input type="file" id="own-image" accept="image/png,image/jpeg,image/svg+xml,image/webp" hidden aria-label="Choose your image">
+        </fieldset>
+        <div class="opt">
+          <label for="opt-dots">Dots</label>
+          <select id="opt-dots">
+            <option value="flow">Round, flowing</option>
+            <option value="rounded">Rounded squares</option>
+            <option value="square">Squares</option>
+          </select>
+          <label for="opt-corners">Corners</label>
+          <select id="opt-corners">
+            <option value="lens">Round</option>
+            <option value="rounded">Rounded</option>
+            <option value="square">Square</option>
+          </select>
+        </div>
+        <div class="opt">
+          <label for="opt-color1">Color</label>
+          <input type="color" id="opt-color1" value="#000000">
+          <label class="radio"><input type="checkbox" id="opt-fade"> Fade to a second color</label>
+          <input type="color" id="opt-color2" value="#000000" aria-label="Second color" hidden>
+          <p id="color-note" class="hint" role="status"></p>
+        </div>
+      </div>
+      <button type="button" id="opt-reset">Undo my changes</button>
+    </section>
+
+    <section class="card result" aria-labelledby="result-heading">
+      <h2 id="result-heading" class="field-label">4. Your QR code</h2>
+      <div class="result-grid">
+        <div id="preview" class="preview" aria-live="polite"><p class="hint">Type a website above to see your code.</p></div>
+        <div class="result-side">
+          <p id="scan-status" class="scan" role="status"></p>
+          <div class="downloads">
+            <button type="button" id="dl-png" class="primary" disabled>Download PNG (print)</button>
+            <button type="button" id="dl-svg" disabled>Download SVG (any size)</button>
+          </div>
+          <p class="hint">Before printing lots, scan a printed copy with an iPhone and an Android phone.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap footer">
+    <p>To match your website, we read its public home page (colors, fonts and logo). Nothing is saved.</p>
+  </footer>
+</body>
+</html>
