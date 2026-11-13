@@ -1,119 +1,233 @@
-/* Colors live here so the whole site can be re-themed in one place. */
+/* Solar Star theme v1 (Edith's spec, 2026-11-12). One shared stylesheet for every page.
+   Colors are tokens: change them here to re-theme the whole site.
+   Contrast (WCAG 2.2): body text 15.5:1 both modes; links 6.7:1 day / 9.4:1 night;
+   muted text 7.3:1 day / 10.3:1 night; buttons 12:1 day / 7.6:1 night. */
+
+@import url("https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Fraunces:opsz,wght@9..144,500&display=swap");
+
 :root {
-  --bg: #faf7f2;
-  --surface: #ffffff;
-  --text: #2b2a28;
-  --muted: #6b675f;
-  --accent: #5b5bd6;
-  --border: #e6e0d6;
+  color-scheme: light;
+  --bg: #F7F4EC;          /* starlight */
+  --surface: #FFFFFF;
+  --text: #0F1A3A;        /* night navy */
+  --muted: #4A4F6A;
+  --heading: #3B1E6E;     /* deep violet */
+  --link: #7A3A96;        /* orchid, darkened for day text */
+  --accent-btn: #3B1E6E;
+  --on-accent: #F7F4EC;
+  --star: #B07A1E;        /* sun gold, day icon shade; never body text */
+  --border: #D9D3E6;
+  --orchid: #9C4DB8;      /* decorative only */
+  --banner-image: url("/assets/banner-day.jpg");
+  --banner-fallback: linear-gradient(100deg, #D9A441 0%, #C9B8F0 45%, #9C4DB8 100%);
+
+  --font-body: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Fraunces", Georgia, serif;
 }
 
+/* Night: follows the device unless the visitor picked a mode with the toggle. */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #1b1d1c;
-    --surface: #252826;
-    --text: #ecebe7;
-    --muted: #a8a49c;
-    --accent: #a9b0ff;
-    --border: #3a3d3b;
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0F1A3A;
+    --surface: #18254D;
+    --text: #F7F4EC;
+    --muted: #C5C8D8;
+    --heading: #E4DAFA;
+    --link: #C9B8F0;      /* lavender */
+    --accent-btn: #D9A441;
+    --on-accent: #0F1A3A;
+    --star: #D9A441;
+    --border: #2E3B66;
+    --banner-image: url("/assets/banner-night.jpg");
+    --banner-fallback: linear-gradient(100deg, #0F1A3A 0%, #3B1E6E 55%, #9C4DB8 100%);
   }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0F1A3A;
+  --surface: #18254D;
+  --text: #F7F4EC;
+  --muted: #C5C8D8;
+  --heading: #E4DAFA;
+  --link: #C9B8F0;
+  --accent-btn: #D9A441;
+  --on-accent: #0F1A3A;
+  --star: #D9A441;
+  --border: #2E3B66;
+  --banner-image: url("/assets/banner-night.jpg");
+  --banner-fallback: linear-gradient(100deg, #0F1A3A 0%, #3B1E6E 55%, #9C4DB8 100%);
 }
 
 * { box-sizing: border-box; }
+
+html {
+  font-size: 106.25%; /* 17px when the browser default is 16px; scales with zoom */
+  -webkit-text-size-adjust: 100%;
+}
 
 body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-family: var(--font-body);
   line-height: 1.6;
+  overflow-wrap: break-word;
 }
 
-.hero {
-  max-width: 900px;
+a { color: var(--link); text-underline-offset: 0.15em; }
+:focus-visible { outline: 3px solid var(--link); outline-offset: 3px; border-radius: 4px; }
+
+.skip {
+  position: absolute; left: -999rem; top: 0.5rem;
+  background: var(--surface); color: var(--text); padding: 0.6rem 1rem; z-index: 10;
+}
+.skip:focus { left: 1rem; }
+
+/* Banner: swap /assets/banner-day.jpg and /assets/banner-night.jpg to change it (no code edits).
+   Until those files exist, the gradient underneath shows as a placeholder. No text on the image. */
+.banner {
+  width: 100%;
+  height: 9.375rem;              /* ~150px on phones */
+  background-image: var(--banner-image), var(--banner-fallback);
+  background-size: cover, cover;
+  background-position: left center, left center;
+  background-repeat: no-repeat;
+}
+@media (min-width: 48rem) { .banner { height: 12.5rem; } }
+
+.topbar {
+  max-width: 56rem;
   margin: 0 auto;
-  padding: 72px 16px 40px;
+  padding: 0.75rem 1rem 0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.theme-toggle {
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  min-height: 2.75rem;           /* 44px+ tap target */
+  min-width: 2.75rem;
+  padding: 0.4rem 0.9rem;
+  color: var(--text);
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.theme-toggle:hover { border-color: var(--link); }
+
+.hero {
+  max-width: 56rem;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 2.5rem;
 }
 
 .eyebrow {
   margin: 0;
-  color: var(--accent);
-  font-weight: 600;
+  color: var(--muted);
+  font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   font-size: 0.85rem;
 }
+.eyebrow::before { content: "\2726\00a0"; color: var(--star); }  /* four-point star mark */
+
+h1, h2 { color: var(--heading); }
 
 h1 {
-  margin: 8px 0 12px;
+  margin: 0.5rem 0 0.75rem;
+  font-family: var(--font-display);
+  font-weight: 500;
   font-size: clamp(2.2rem, 6vw, 3.4rem);
   line-height: 1.1;
 }
 
 .tagline {
   margin: 0;
-  max-width: 560px;
+  max-width: 36rem;
   color: var(--muted);
   font-size: 1.15rem;
 }
 
 main {
-  max-width: 900px;
+  max-width: 56rem;
   margin: 0 auto;
-  padding: 0 16px 56px;
+  padding: 0 1rem 3.5rem;
 }
 
 .cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
+  gap: 1rem;
 }
 
 .card {
+  height: 100%;
   background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 24px;
+  border: 2px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
 }
 
 .card h2 {
-  margin: 0 0 8px;
+  margin: 0 0 0.5rem;
   font-size: 1.25rem;
+  font-weight: 700;
 }
 
 .card p {
-  margin: 0 0 16px;
+  margin: 0 0 1rem;
   color: var(--muted);
 }
 
 .status {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--accent);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--link);
+}
+
+.card-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  border-radius: 0.75rem;
+}
+.card-link:hover .card,
+.card-link:focus-visible .card { border-color: var(--link); }
+
+.back {
+  color: var(--link);
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-block;
+  padding: 0.6rem 0;             /* taller tap target */
+}
+.eyebrow:has(.back)::before { content: none; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.5rem 1.1rem;
+  font-weight: 700;
+  color: var(--on-accent);
+  background: var(--accent-btn);
+  border-radius: 999px;
+  text-decoration: none;
 }
 
 footer {
   border-top: 1px solid var(--border);
-  padding: 24px 16px;
+  padding: 1.5rem 1rem;
   text-align: center;
   color: var(--muted);
   font-size: 0.9rem;
 }
+footer a { color: var(--link); display: inline-block; padding: 0.5rem 0.25rem; }
 
-footer a { color: var(--accent); }
-
-.card-link {
-  color: inherit;
-  text-decoration: none;
-}
-
-.card-link:hover .card,
-.card-link:focus-visible .card {
-  border-color: var(--accent);
-}
-
-.back {
-  color: var(--accent);
-  font-weight: 600;
-  text-decoration: none;
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
 }
