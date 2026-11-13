@@ -1,0 +1,155 @@
+/* Solar Star theme v1 (Edith's spec, 2026-11-12). One shared stylesheet for every page and app.
+   Change a color here and everything that links this file follows.
+   Day/night: follows the device; html[data-theme="light"|"dark"] (set by theme.js) overrides it.
+   Contrast numbers for every pair: see contrast-report.md beside this file. */
+
+@import url("https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Fraunces:opsz,wght@9..144,500&display=swap");
+
+:root {
+  /* Brand palette (raw colors: use the role colors below in pages) */
+  --ss-navy: #0F1A3A;
+  --ss-starlight: #F7F4EC;
+  --ss-violet: #3B1E6E;
+  --ss-orchid: #9C4DB8;        /* decorative only */
+  --ss-orchid-dark: #7A3A96;   /* day links */
+  --ss-lavender: #C9B8F0;      /* night links */
+  --ss-lavender-light: #E4DAFA;/* night headings */
+  --ss-gold: #D9A441;          /* night buttons + star marks, never body text */
+  --ss-gold-dark: #B07A1E;     /* day icons */
+  --ss-teal: #2FA7B5;          /* rare accent, night only for text */
+
+  /* Fonts and sizes */
+  --ss-font-body: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --ss-font-heading: "Fraunces", Georgia, "Times New Roman", serif;
+  --ss-text-size: 1.0625rem;   /* about 17px */
+  --ss-line: 1.6;
+  --ss-radius: 0.75rem;
+  --ss-tap: 2.75rem;           /* 44px minimum tap target */
+  --ss-banner-height: clamp(9.375rem, 22vw, 15rem); /* 150px on phones */
+
+  /* Day roles (default) */
+  --ss-bg: var(--ss-starlight);
+  --ss-surface: #FFFFFF;
+  --ss-surface-2: #EFEAF6;
+  --ss-text: var(--ss-navy);
+  --ss-muted: #4A4F66;
+  --ss-heading: var(--ss-violet);
+  --ss-link: var(--ss-orchid-dark);
+  --ss-accent: var(--ss-violet);       /* main buttons */
+  --ss-on-accent: var(--ss-starlight);
+  --ss-mark: var(--ss-gold-dark);      /* icons, star marks */
+  --ss-border: #D9D1E6;                /* decorative lines */
+  --ss-control-border: #7D7591;        /* input and button outlines (3:1 or more) */
+  --ss-focus: var(--ss-orchid-dark);
+  --ss-error: #A3221A;
+  --ss-error-bg: #FBEAE8;
+  --ss-warn-bg: #FFF3D6;
+  --ss-warn-border: var(--ss-gold-dark);
+  --ss-banner: url("/assets/banner-day.jpg");
+  color-scheme: light;
+}
+
+/* Night roles: same values twice, once for "follow the device", once for the manual toggle. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ss-bg: var(--ss-navy);
+    --ss-surface: #18244A;
+    --ss-surface-2: #22305C;
+    --ss-text: var(--ss-starlight);
+    --ss-muted: #B9BCD0;
+    --ss-heading: var(--ss-lavender-light);
+    --ss-link: var(--ss-lavender);
+    --ss-accent: var(--ss-gold);
+    --ss-on-accent: var(--ss-navy);
+    --ss-mark: var(--ss-gold);
+    --ss-border: #34416E;
+    --ss-control-border: #7E8AB8;
+    --ss-focus: var(--ss-lavender);
+    --ss-error: #FF9C94;
+    --ss-error-bg: #3A1F2E;
+    --ss-warn-bg: #3A3220;
+    --ss-warn-border: var(--ss-gold);
+    --ss-banner: url("/assets/banner-night.jpg");
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --ss-bg: var(--ss-navy);
+  --ss-surface: #18244A;
+  --ss-surface-2: #22305C;
+  --ss-text: var(--ss-starlight);
+  --ss-muted: #B9BCD0;
+  --ss-heading: var(--ss-lavender-light);
+  --ss-link: var(--ss-lavender);
+  --ss-accent: var(--ss-gold);
+  --ss-on-accent: var(--ss-navy);
+  --ss-mark: var(--ss-gold);
+  --ss-border: #34416E;
+  --ss-control-border: #7E8AB8;
+  --ss-focus: var(--ss-lavender);
+  --ss-error: #FF9C94;
+  --ss-error-bg: #3A1F2E;
+  --ss-warn-bg: #3A3220;
+  --ss-warn-border: var(--ss-gold);
+  --ss-banner: url("/assets/banner-night.jpg");
+  color-scheme: dark;
+}
+
+/* ---------- Base ---------- */
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--ss-bg);
+  color: var(--ss-text);
+  font-family: var(--ss-font-body);
+  font-size: var(--ss-text-size);
+  line-height: var(--ss-line);
+  overflow-wrap: break-word;
+}
+a { color: var(--ss-link); text-underline-offset: 0.15em; }
+:focus-visible { outline: 3px solid var(--ss-focus); outline-offset: 2px; }
+
+/* Fraunces for large headings only; everything else stays Atkinson. */
+.ss-display, h1 {
+  font-family: var(--ss-font-heading);
+  font-weight: 500;
+  color: var(--ss-heading);
+  line-height: 1.15;
+}
+
+/* ---------- Banner: decorative image, no text on it ---------- */
+.ss-banner {
+  display: block;
+  width: 100%;
+  height: var(--ss-banner-height);
+  background: var(--ss-banner) left center / cover no-repeat, var(--ss-bg);
+}
+
+/* ---------- Day/night toggle (theme.js fills in the label) ---------- */
+.ss-theme-toggle {
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  min-height: var(--ss-tap);
+  min-width: var(--ss-tap);
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid var(--ss-control-border);
+  background: var(--ss-surface);
+  color: var(--ss-text);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.ss-theme-toggle .ss-icon { color: var(--ss-mark); }
+
+/* ---------- Respect reduce motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
