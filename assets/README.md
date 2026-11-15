@@ -1,8 +1,8 @@
 # Banners
 
-Both files here are PLACEHOLDERS (plain gradients). Replace them with the final banners using exactly these names (no code changes needed):
+Both banners here are final:
 
-- `banner-day.jpg`: gold day banner
-- `banner-night.jpg`: night banner (violet-tinted version coming)
+- `banner-day.jpg`: gold day banner (1600x295)
+- `banner-night.jpg`: violet night banner (1600x337)
 
-Wide images (about 1600x300), no text on them, each under ~150 KB. The left side stays in view on phones.
+To change one, replace the file using the same name. No code changes are needed. Keep them wide (about 1600 px), with no text, each under ~150 KB. The left side stays in view on phones.
