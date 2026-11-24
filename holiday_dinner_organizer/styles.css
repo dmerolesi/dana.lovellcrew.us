@@ -87,12 +87,12 @@ button.ghost { background: transparent; }
 button.danger { color: var(--error); border-color: transparent; }
 button:disabled { opacity: 0.6; cursor: progress; }
 
-input[type="text"], input[type="url"], input[type="password"], input[type="number"], input[type="datetime-local"], select, textarea {
+input[type="text"], input[type="search"], input[type="url"], input[type="password"], input[type="number"], input[type="datetime-local"], select, textarea {
   font: inherit; font-size: 1rem; color: var(--text); background: var(--bg);
   border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; width: 100%;
 }
 input[type="number"] { width: 5.5em; }
-input[type="text"], input[type="url"], input[type="password"], input[type="number"], input[type="datetime-local"], select, .plan-title { min-height: var(--ss-tap); }
+input[type="text"], input[type="search"], input[type="url"], input[type="password"], input[type="number"], input[type="datetime-local"], select, .plan-title { min-height: var(--ss-tap); }
 textarea { resize: vertical; }
 textarea.mono { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.8rem; }
 input[type="checkbox"], input[type="radio"] { width: 18px; height: 18px; accent-color: var(--accent); flex: none; margin-top: 3px; }
@@ -239,3 +239,8 @@ summary { cursor: pointer; font-weight: 600; color: var(--label); min-height: va
   #print-root small { color: #555; }
   #print-root .p-break { break-before: page; }
 }
+
+/* Recipe Library picker */
+.lib-list { max-height: 420px; overflow-y: auto; border: 1px solid var(--line); border-radius: 10px; padding: 4px 12px; margin: 8px 0 12px; }
+.lib-row { margin: 8px 0; }
+.field.grow { flex: 1 1 220px; }

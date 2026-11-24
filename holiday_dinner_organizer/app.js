@@ -41,7 +41,7 @@ function freshState() {
 
 let state = load();
 let apiKey = readKey();
-const ui = { tab: 'kitchen', planTab: 'steps', day: null, busy: {}, plan: null };
+const ui = { tab: 'kitchen', planTab: 'steps', day: null, busy: {}, plan: null, lib: null };
 
 // ---------- storage (browser only; wrapped because private windows can block it) ----------
 
@@ -228,6 +228,71 @@ function recipeCard(r, i) {
   </article>`;
 }
 
+// ---------- Recipe Library picker (the file stays in memory, never saved or sent) ----------
+
+const LIB_SHOW = 150;
+
+function libraryMatches() {
+  const q = ui.lib.query.trim().toLowerCase();
+  return ui.lib.recipes.filter((r) => (!ui.lib.course || r.course === ui.lib.course)
+    && (!q || r.title.toLowerCase().includes(q) || r.ingredients.some((x) => x.toLowerCase().includes(q))));
+}
+
+function libraryRows() {
+  const found = libraryMatches();
+  const rows = found.slice(0, LIB_SHOW).map((r) => {
+    const meta = [r.course, r.total_minutes ? formatDuration(r.total_minutes) : '', r.servings ? `serves ${r.servings}` : ''].filter(Boolean).join(' · ');
+    return `<label class="check lib-row"><input type="checkbox" data-libpick="${esc(r.id)}" ${ui.lib.picked.has(r.id) ? 'checked' : ''}>
+      <span><b>${esc(r.title)}</b>${meta ? `<br><span class="hint">${esc(meta)}</span>` : ''}</span></label>`;
+  }).join('');
+  const more = found.length > LIB_SHOW ? `<p class="hint">Showing ${LIB_SHOW} of ${found.length}. Type to narrow it down.</p>` : '';
+  return (rows || '<p class="empty">No recipes match.</p>') + more;
+}
+
+function libraryPicker() {
+  if (!ui.lib) return '';
+  const courses = [...new Set(ui.lib.recipes.map((r) => r.course).filter(Boolean))].sort();
+  const n = ui.lib.picked.size;
+  return `<div class="card lib-card">
+    <header class="recipe-head"><h2>Pick from your Recipe Library</h2>
+      <button class="ghost" data-action="lib-close">Close</button></header>
+    <p class="hint">${ui.lib.recipes.length} recipes in ${esc(ui.lib.name)}. Tick the ones for this meal.</p>
+    <div class="row">
+      <label class="field grow">Search<input type="search" placeholder="Title or ingredient" value="${esc(ui.lib.query)}" data-libsearch="1"></label>
+      <label class="field">Course<select data-libcourse="1"><option value="">All</option>${courses.map((c) => `<option ${c === ui.lib.course ? 'selected' : ''}>${esc(c)}</option>`).join('')}</select></label>
+    </div>
+    <div class="lib-list" id="lib-list">${libraryRows()}</div>
+    <div class="row"><button class="primary" data-action="lib-add" id="lib-add" ${n ? '' : 'disabled'}>Add ${n} recipe${n === 1 ? '' : 's'}</button>
+      ${n ? '<button class="ghost" data-action="lib-clear">Clear ticks</button>' : ''}</div>
+  </div>`;
+}
+
+function libraryText(r) {
+  return [r.title, ...(r.servings ? [`Serves: ${r.servings}`] : []),
+    '', 'Ingredients:', ...r.ingredients.map((x) => `- ${x}`),
+    '', 'Steps:', ...r.steps.map((x, i) => `${i + 1}. ${x}`),
+    ...(r.source ? ['', `Source: ${r.source}`] : [])].join('\n');
+}
+
+async function openLibrary(file) {
+  let data;
+  try { data = JSON.parse(await file.text()); } catch { throw new Error(`${file.name} isn't a Recipe Library file.`); }
+  const list = (Array.isArray(data) ? data : data?.recipes || []).filter((r) => r && r.id && r.title && Array.isArray(r.steps) && r.steps.length)
+    .map((r) => ({ id: String(r.id), title: String(r.title), course: String(r.course || ''), servings: String(r.servings || ''),
+      total_minutes: Number(r.total_minutes) || null, source: String(r.source || ''),
+      ingredients: (r.ingredients || []).map(String), steps: r.steps.map(String) }))
+    .sort((a, b) => a.title.localeCompare(b.title));
+  if (!list.length) throw new Error(`No recipes found in ${file.name}.`);
+  ui.lib = { name: file.name, recipes: list, picked: new Set(), query: '', course: '' };
+}
+
+function refreshLibrary() {
+  const box = $('#lib-list');
+  if (box) box.innerHTML = libraryRows();
+  const btn = $('#lib-add');
+  if (btn) { const n = ui.lib.picked.size; btn.disabled = !n; btn.textContent = `Add ${n} recipe${n === 1 ? '' : 's'}`; }
+}
+
 function renderRecipes() {
   const s = state.settings;
   const api = s.aiMode === 'api';
@@ -258,11 +323,13 @@ function renderRecipes() {
       <div class="row">
         <button data-action="add" data-type="text">＋ Paste text</button>
         <button data-action="add" data-type="url">＋ Link</button>
-        <label class="button">＋ Upload file<input type="file" accept=".txt,.md,.pdf,image/*" multiple hidden data-upload="1"></label>
+        <label class="button">＋ Upload file<input type="file" accept=".txt,.md,.pdf,.json,application/json,image/*" multiple hidden data-upload="1"></label>
+        <label class="button">＋ From my Recipe Library<input type="file" accept="application/json,.json" hidden data-library="1"></label>
         <button class="ghost" data-action="sample">Load example meal</button>
       </div>
-      <p class="hint">Files can be text, PDF or a photo of a recipe card.</p>
+      <p class="hint">Files can be text, PDF, a photo of a recipe card, or a recipe .json file (already read; no AI step needed). A Recipe Library file (recipes.json) lets you tick the recipes you want; it stays on this device.</p>
     </div>
+    ${libraryPicker()}
     <div class="next-row"><button class="primary" data-goto="plan">See the plan →</button></div>`;
 }
 
@@ -429,6 +496,29 @@ function addRecipe(type, extra = {}) {
   return r;
 }
 
+// A .json file of finished recipe data (one recipe, a list, or {recipes:[...]}) goes straight in,
+// with no AI step. A Recipe Library file (plain-text steps) opens the picker instead.
+async function addJsonFile(file) {
+  if (file.size > MAX_FILE) throw new Error(`${file.name} is too big (over 15 MB).`);
+  let data;
+  try { data = JSON.parse(await file.text()); } catch { throw new Error(`${file.name} isn't valid JSON.`); }
+  const items = Array.isArray(data) ? data : Array.isArray(data?.recipes) ? data.recipes : [data];
+  if (items.some((x) => x && x.id && Array.isArray(x.steps) && typeof x.steps[0] === 'string')) {
+    await openLibrary(file);
+    return 'library';
+  }
+  let added = 0;
+  for (const x of items) {
+    let parsed;
+    try { parsed = normalizeRecipe(x); } catch { continue; }
+    if (!parsed.steps.length) continue;
+    addRecipe('text', { parsed });
+    added++;
+  }
+  if (!added) throw new Error(`No recipe steps found in ${file.name}.`);
+  return added;
+}
+
 async function readFile(file) {
   if (file.size > MAX_FILE) throw new Error(`${file.name} is too big (over 15 MB).`);
   if (file.type === 'application/pdf' || /\.pdf$/i.test(file.name)) {
@@ -542,8 +632,22 @@ document.addEventListener('click', async (e) => {
       cards[cards.length - 1]?.querySelector('textarea, input')?.focus();
       break;
     }
+    case 'lib-add': {
+      const picked = ui.lib.recipes.filter((x) => ui.lib.picked.has(x.id));
+      picked.forEach((x) => addRecipe('text', { text: libraryText(x), url: x.source }));
+      ui.lib.picked.clear();
+      render();
+      toast(`Added ${picked.length} recipe${picked.length === 1 ? '' : 's'}. Read each one with AI below.`);
+      break;
+    }
+    case 'lib-clear':
+      ui.lib.picked.clear(); renderRecipes();
+      break;
+    case 'lib-close':
+      ui.lib = null; renderRecipes();
+      break;
     case 'remove':
-      if (r && (!r.parsed || window.confirm(`Remove ${r.parsed.title} from this meal?`))) {
+      if (r &&(!r.parsed || window.confirm(`Remove ${r.parsed.title} from this meal?`))) {
         state.recipes = state.recipes.filter((x) => x !== r);
         save(); render();
       }
@@ -627,6 +731,7 @@ document.addEventListener('input', (e) => {
   const t = e.target;
   if (t.id === 'plan-title') { state.title = t.value; save(); return; }
   if (t.dataset.key) { apiKey = t.value.trim(); writeKey(); return; }
+  if (t.dataset.libsearch) { ui.lib.query = t.value; refreshLibrary(); return; }
   if (t.dataset.recipe && ['text', 'url', 'answer'].includes(t.dataset.prop)) {
     findRecipe(t.dataset.recipe)[t.dataset.prop] = t.value;
     save();
@@ -638,6 +743,19 @@ document.addEventListener('change', async (e) => {
   if (t.dataset.field === 'mealTime') { state.mealTime = t.value; save(); return; }
   if (t.dataset.recipe && t.dataset.prop === 'eatAt') { findRecipe(t.dataset.recipe).eatAt = t.value; save(); return; }
   if (t.dataset.key) { renderRecipes(); return; }
+  if (t.dataset.libcourse) { ui.lib.course = t.value; refreshLibrary(); return; }
+  if (t.dataset.libpick) {
+    if (t.checked) ui.lib.picked.add(t.dataset.libpick); else ui.lib.picked.delete(t.dataset.libpick);
+    refreshLibrary();
+    return;
+  }
+  if (t.dataset.library) {
+    try { await openLibrary(t.files[0]); } catch (err) { toast(err.message, true); }
+    t.value = '';
+    renderRecipes();
+    $('.lib-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return;
+  }
 
   if (t.dataset.appliance) {
     const type = t.dataset.appliance;
@@ -684,6 +802,11 @@ document.addEventListener('change', async (e) => {
     const files = [...t.files];
     for (const f of files) {
       try {
+        if (f.type === 'application/json' || /\.json$/i.test(f.name)) {
+          const n = await addJsonFile(f);
+          toast(n === 'library' ? `${f.name} is a Recipe Library: tick the recipes you want below.` : `Added ${n} recipe${n === 1 ? '' : 's'} from ${f.name}.`);
+          continue;
+        }
         const file = await readFile(f);
         addRecipe('file', { file });
       } catch (err) {
