@@ -1,21 +1,37 @@
 # dana.lovellcrew.us
 
-Dana's corner of the Lovell crew site: projects, experiments, and the things I'm learning to build.
+Dana's projects site: small apps, printables, and AI skills, built in the Solar Star Solutions style.
+
+Live at **https://dana.lovellcrew.us**
 
 ## What's here
 
-| File | What it does |
-|------|--------------|
-| `index.html` | The homepage |
-| `projects/index.html` | The Projects page |
-| `skills/index.html` | The AI Skills page (the skills themselves live in [ai-skills](https://github.com/dmerolesi/ai-skills)) |
-| `style.css` | Colors, fonts, and spacing (light and dark mode) |
-| `holiday_dinner_organizer/` | Holiday Dinner Organizer: plans the prep and cooking for a big meal (step-by-step guide, appliance timeline, grocery and tool lists). Plain HTML and JavaScript, no build step. |
-| `step_by_step_recipes/` | Step by Step Recipes: shows a recipe one step at a time in large text, reads it aloud, and waits for the cook. Includes accessible themes, dyslexia-friendly fonts, and timers. Shared family recipes are stored in GitHub. Plain HTML and JavaScript, no build step. |
-| `functions/api/recipe-import.js` | Cloudflare Pages Function at `/api/recipe-import` that reads a recipe page's schema.org data for Step by Step Recipes' "Get recipe from link" button. |
+| Path | What it is |
+|------|------------|
+| `index.html` | Homepage |
+| `projects/` | Projects page, with a card for each project |
+| `projects/meal-matrix/` | Meal Matrix: 13 printable mix-and-match dinner sheets (PDF) |
+| `skills/` | AI Skills page (the skills themselves live in [ai-skills](https://github.com/dmerolesi/ai-skills)) |
+| `holiday_dinner_organizer/` | Holiday Dinner Organizer: plans prep and cooking for a big meal (step-by-step guide, appliance timeline, grocery and tool lists) |
+| `step_by_step_recipes/` | Step by Step Recipes: shows and reads a recipe aloud one step at a time, with big text and timers. Each visitor's recipes stay in their own browser unless they connect their own GitHub file |
+| `custom_qr/` | Custom QR: makes a QR code in a website's own colors and logo, and checks that it scans |
+| `functions/api/recipe-import.js` | Pages Function at `/api/recipe-import`: reads a recipe page's schema.org data for "Get recipe from link" |
+| `functions/api/site-theme.js` | Pages Function at `/api/site-theme`: reads a site's public colors and logo for Custom QR (rate-limited) |
+| `404.html` | Page-not-found page |
+| `solar-star.css`, `theme.js` | Shared Solar Star theme: colors, fonts, day/night mode |
+| `style.css` | Page layout |
+| `assets/` | Banners, logo and icons |
+| `_headers` | Security headers (Content Security Policy and more) |
 
 ## How it's built and hosted
 
-Plain HTML and CSS, with no frameworks and no build step. The site is hosted on
-[Cloudflare Pages](https://pages.cloudflare.com/), which publishes it automatically
-whenever a change is saved to this repository.
+Plain HTML, CSS and JavaScript, with no frameworks and no build step. Hosted on
+[Cloudflare Pages](https://pages.cloudflare.com/), which publishes the site automatically
+whenever a change is pushed to `main`.
+
+## Privacy
+
+No accounts, ads or tracking. Apps save your data in your own browser. Holiday Dinner only
+sends a recipe to an AI service if you add your own API key.
+
+© 2026 Solar Star Solutions
