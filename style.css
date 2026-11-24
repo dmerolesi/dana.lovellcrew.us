@@ -123,6 +123,16 @@ main {
   text-decoration: none;
 }
 
+/* Quiet Ko-fi line at the end of a project page */
+.support {
+  margin: 2.5rem 0 0;
+  text-align: center;
+  color: var(--ss-muted);
+  font-size: 0.95rem;
+}
+.support span { color: var(--ss-mark); }
+.support a { display: inline-block; padding: 0.5rem 0.25rem; }
+
 footer {
   border-top: 1px solid var(--ss-border);
   padding: 1.5rem 1rem;
