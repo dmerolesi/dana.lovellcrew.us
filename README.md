@@ -10,7 +10,7 @@ Live at **https://dana.lovellcrew.us**
 |------|------------|
 | `index.html` | Homepage |
 | `projects/` | Projects page, with a card for each project |
-| `projects/meal-matrix/` | Meal Matrix: 13 printable mix-and-match dinner sheets (PDF) |
+| `projects/meal-matrix/` | Meal Matrix: 21 printable mix-and-match dinner sheets (PDF) |
 | `skills/` | AI Skills page (the skills themselves live in [ai-skills](https://github.com/dmerolesi/ai-skills)) |
 | `holiday_dinner_organizer/` | Holiday Dinner Organizer: plans prep and cooking for a big meal (step-by-step guide, appliance timeline, grocery and tool lists) |
 | `step_by_step_recipes/` | Step by Step Recipes: shows and reads a recipe aloud one step at a time, with big text and timers. Each visitor's recipes stay in their own browser unless they connect their own GitHub file |

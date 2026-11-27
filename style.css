@@ -147,3 +147,6 @@ footer a { display: inline-block; padding: 0.5rem 0.25rem; }
 
 /* Solar Star logo in page headers (theme v1.2: 48–64 px) */
 .hero .logo { display: block; width: 64px; height: 64px; margin-bottom: 0.75rem; }
+
+/* Section heading between card groups (e.g. Meal Matrix › Slow Cooker) */
+.section-title { margin: 2.5rem 0 1rem; font-size: 1.6rem; }
